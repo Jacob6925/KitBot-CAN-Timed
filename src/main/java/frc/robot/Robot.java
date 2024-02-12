@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
   /**
    * How many amps the feeder motor can use.
    */
-  static final int FEEDER_CURRENT_LIMIT_A = 80;
+  static final int FEEDER_CURRENT_LIMIT_A = 60;
 
   /**
    * Percent output to run the feeder when expelling note
@@ -121,7 +121,7 @@ public class Robot extends TimedRobot {
    *
    * In our testing we favored the CIM over NEO, if using a NEO lower this to 60
    */
-  static final int LAUNCHER_CURRENT_LIMIT_A = 80;
+  static final int LAUNCHER_CURRENT_LIMIT_A = 60;
 
   /**
    * Percent output to run the launcher when intaking AND expelling note
