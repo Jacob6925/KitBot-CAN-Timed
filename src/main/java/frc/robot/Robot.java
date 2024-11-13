@@ -13,6 +13,9 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // Imports that allow the usage of REV Spark Max motor controllers
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -25,6 +28,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
 public class Robot extends TimedRobot {
@@ -36,7 +40,7 @@ public class Robot extends TimedRobot {
   private static final String kLaunch = "launch";
   private static final String kDrive = "drive";
   private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  public final SendableChooser<String> m_chooser = new SendableChooser<>();
   
 
   /*
@@ -47,6 +51,7 @@ public class Robot extends TimedRobot {
    * The rookie kit comes with CIMs which are brushed motors.
    * Use the appropriate other class if you are using different controllers.
    */
+
   CANSparkBase leftRear = new CANSparkMax(1, MotorType.kBrushed);
   CANSparkBase leftFront = new CANSparkMax(2, MotorType.kBrushed);
   CANSparkBase rightRear = new CANSparkMax(3, MotorType.kBrushed);
@@ -134,17 +139,27 @@ public class Robot extends TimedRobot {
    * .14 works well with no bend from our testing
    */
   static final double LAUNCHER_AMP_SPEED = .17;
+  public static final String Robot = null;
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+
+  static List<Command> commands = new ArrayList<Command>();
+
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("do nothing", kNothingAuto);
-    m_chooser.addOption("launch note and drive", kLaunchAndDrive);
-    m_chooser.addOption("launch", kLaunch);
-    m_chooser.addOption("drive", kDrive);
+    // commands
+    
+    Command a_forward = new Command("forward", "moves the robot forward", 1, 1, 1.5, 1, 0);
+    Command a_nothing = new Command("nothing", "do nothing", 0, 0, 0, 0, 0);
+
+    for(Command c : commands) {
+      m_chooser.addOption(c.name, c.name);
+    }
+    
+    m_chooser.setDefaultOption(a_forward.name, a_forward.name);
     SmartDashboard.putData("Auto choices", m_chooser);
 
 
@@ -225,12 +240,13 @@ public class Robot extends TimedRobot {
     rightRear.setIdleMode(IdleMode.kBrake);
     rightFront.setIdleMode(IdleMode.kBrake);
 
-    AUTO_LAUNCH_DELAY_S = 2;
-    AUTO_DRIVE_DELAY_S = 3;
+    // default values? safe to remove
+    // AUTO_LAUNCH_DELAY_S = 2;
+    // AUTO_DRIVE_DELAY_S = 3;
 
-    AUTO_DRIVE_TIME_S = 2.0;
-    AUTO_DRIVE_SPEED = -0.5;
-    AUTO_LAUNCHER_SPEED = 1;
+    // AUTO_DRIVE_TIME_S = 2.0;
+    // AUTO_DRIVE_SPEED = -0.5;
+    // AUTO_LAUNCHER_SPEED = 1;
     
     /*
      * Depeding on which auton is selected, speeds for the unwanted subsystems are set to 0
@@ -238,26 +254,21 @@ public class Robot extends TimedRobot {
      *
      * For kDrive you can also change the kAutoDriveBackDelay
      */
-    if(m_autoSelected == kLaunch)
-    {
-      AUTO_DRIVE_SPEED = 0;
-      AUTO_LAUNCHER_SPEED = 1;
+    
+
+    // assigns com to currently selected auto
+    Command com = null;
+    for(Command c : commands) {
+      if(m_autoSelected.equals(c.name)) {
+        com = c;
+      }
     }
-    else if(m_autoSelected == kDrive)
-    {
-      AUTO_LAUNCHER_SPEED = 0;
-      AUTO_DRIVE_SPEED = -0.5;
-    }
-    else if(m_autoSelected == kLaunchAndDrive)
-    {
-      AUTO_DRIVE_SPEED = -0.5;
-      AUTO_LAUNCHER_SPEED = 1;
-    }
-    else if(m_autoSelected == kNothingAuto)
-    {
-      AUTO_DRIVE_SPEED = 0;
-      AUTO_LAUNCHER_SPEED = 0;
-    }
+
+    AUTO_LAUNCH_DELAY_S = com.AUTO_LAUNCH_DELAY_S;
+    AUTO_DRIVE_DELAY_S = com.AUTO_DRIVE_DELAY_S;
+    AUTO_DRIVE_TIME_S = com.AUTO_DRIVE_TIME_S;
+    AUTO_DRIVE_SPEED = com.AUTO_DRIVE_SPEED;
+    AUTO_LAUNCHER_SPEED = com.AUTO_LAUNCHER_SPEED;
 
     autonomousStartTime = Timer.getFPGATimestamp();
   }
