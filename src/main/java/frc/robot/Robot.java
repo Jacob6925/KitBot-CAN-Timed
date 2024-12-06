@@ -52,10 +52,10 @@ public class Robot extends TimedRobot {
    * Use the appropriate other class if you are using different controllers.
    */
 
-  CANSparkBase leftRear = new CANSparkMax(1, MotorType.kBrushed);
-  CANSparkBase leftFront = new CANSparkMax(2, MotorType.kBrushed);
-  CANSparkBase rightRear = new CANSparkMax(3, MotorType.kBrushed);
-  CANSparkBase rightFront = new CANSparkMax(4, MotorType.kBrushed);
+  CANSparkBase leftRear = new CANSparkMax(1, MotorType.kBrushless);
+  CANSparkBase leftFront = new CANSparkMax(2, MotorType.kBrushless);
+  CANSparkBase rightRear = new CANSparkMax(3, MotorType.kBrushless);
+  CANSparkBase rightFront = new CANSparkMax(4, MotorType.kBrushless);
 
   /*
    * A class provided to control your drivetrain. Different drive styles can be passed to differential drive:
@@ -71,8 +71,8 @@ public class Robot extends TimedRobot {
    *
    * Both of the motors used on the KitBot mechansim are CIMs which are brushed motors
    */
-  CANSparkBase m_launchWheel = new CANSparkMax(6, MotorType.kBrushed);
-  CANSparkBase m_feedWheel = new CANSparkMax(5, MotorType.kBrushed);
+  CANSparkBase m_launchWheel = new CANSparkMax(6, MotorType.kBrushless);
+  CANSparkBase m_feedWheel = new CANSparkMax(5, MotorType.kBrushless);
 
     /**
    * The starter code uses the most generic joystick class.
@@ -100,12 +100,12 @@ public class Robot extends TimedRobot {
  /**
    * How many amps can an individual drivetrain motor use.
    */
-  static final int DRIVE_CURRENT_LIMIT_A = 60;
+  static final int DRIVE_CURRENT_LIMIT_A = 20;
 
   /**
    * How many amps the feeder motor can use.
    */
-  static final int FEEDER_CURRENT_LIMIT_A = 60;
+  static final int FEEDER_CURRENT_LIMIT_A = 20;
 
   /**
    * Percent output to run the feeder when expelling note
@@ -127,7 +127,7 @@ public class Robot extends TimedRobot {
    *
    * In our testing we favored the CIM over NEO, if using a NEO lower this to 60
    */
-  static final int LAUNCHER_CURRENT_LIMIT_A = 60;
+  static final int LAUNCHER_CURRENT_LIMIT_A = 20;
 
   /**
    * Percent output to run the launcher when intaking AND expelling note
@@ -181,8 +181,10 @@ public class Robot extends TimedRobot {
     /*
      * One side of the drivetrain must be inverted, as the motors are facing opposite directions
      */
+
     leftFront.setInverted(true);
     rightFront.setInverted(false);
+
 
     m_drivetrain = new DifferentialDrive(leftFront, rightFront);
 
@@ -191,8 +193,7 @@ public class Robot extends TimedRobot {
      *
      * Add white tape to wheel to help determine spin direction.
      */
-    m_feedWheel.setInverted(true);
-    m_launchWheel.setInverted(true);
+   
 
     /*
      * Apply the current limit to the launching mechanism
