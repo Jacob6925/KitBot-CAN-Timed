@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
 public class Robot extends TimedRobot {
@@ -40,8 +39,7 @@ public class Robot extends TimedRobot {
   private static final String kLaunch = "launch";
   private static final String kDrive = "drive";
   private String m_autoSelected;
-  public final SendableChooser<String> m_chooser = new SendableChooser<>();
-  
+  private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   /*
    * Drive motor controller instances.
@@ -139,7 +137,6 @@ public class Robot extends TimedRobot {
    * .14 works well with no bend from our testing
    */
   static final double LAUNCHER_AMP_SPEED = .17;
-  public static final String Robot = null;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -181,10 +178,8 @@ public class Robot extends TimedRobot {
     /*
      * One side of the drivetrain must be inverted, as the motors are facing opposite directions
      */
-
     leftFront.setInverted(true);
     rightFront.setInverted(false);
-
 
     m_drivetrain = new DifferentialDrive(leftFront, rightFront);
 
@@ -193,7 +188,8 @@ public class Robot extends TimedRobot {
      *
      * Add white tape to wheel to help determine spin direction.
      */
-   
+    // m_feedWheel.setInverted(true);
+    // m_launchWheel.setInverted(true);
 
     /*
      * Apply the current limit to the launching mechanism
